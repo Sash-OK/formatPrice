@@ -72,7 +72,7 @@
 
                 getChar = function (e) {
 
-                    if (e.which === null) { // IE
+                    if (e.which == null) { // IE
 
                         // спец. символ
                         if (e.keyCode < 32) {
@@ -84,7 +84,6 @@
 
                     // все кроме IE
                     if (e.which !== 0 && e.charCode !== 0) {
-
                         // спец. символ
                         if (e.which < 32) {
                             return;
@@ -147,7 +146,7 @@
                 },
                 
                 checkVal = function (text) {
-                    
+                    // TODO: checking value
                 };
 
             // Greenify the collection based on the settings variable.
@@ -256,6 +255,10 @@
                         char = getChar(e || event),
                         iePos = {},
                         cursorPos;
+
+                    if (e.ctrlKey || e.altKey) {
+                        return;
+                    }
 
                     // Определение положения курсора
                     if (this.createTextRange) {
