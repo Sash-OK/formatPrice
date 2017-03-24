@@ -42,6 +42,7 @@
     (function ($) {
 
         // TODO форматирование при инициализации
+        // TODO метод валидации (true/false)
 
         $.fn.formatPrice = function (options) {
 
@@ -55,7 +56,7 @@
                     return text.indexOf(delim) !== -1;
                 },
 
-                isMultiZero = function (text) {
+                delMultiZero = function (text) {
 
                     if (/^0+/.test(text)) {
 
@@ -143,6 +144,10 @@
                         input.value = val.slice(0, cursorPos) + delim + val.slice(endPos);
                         input.selectionStart = input.selectionEnd = cursorPos + 1;
                     }
+                },
+                
+                checkVal = function (text) {
+                    
                 };
 
             // Greenify the collection based on the settings variable.
@@ -174,7 +179,7 @@
                 this.onblur = function () {
                     var val = this.value,
                         reg = new RegExp('^\\' + delim),
-                        zeroDec = '',
+                        zeroDec = addZeroes('', decimal),
                         floatVal;
 
                     if (hasDelim(val, delim)) {
@@ -185,16 +190,14 @@
 
                         floatVal = val.split(delim);
 
-                        floatVal[0] = isMultiZero(floatVal[0]);
+                        floatVal[0] = delMultiZero(floatVal[0]);
 
                         if (!floatVal[1].length) {
-
-                            zeroDec = addZeroes(zeroDec, decimal);
 
                             this.value = floatVal[0] + delim + zeroDec;
                         } else if (floatVal[1].length < decimal) {
 
-                            zeroDec = addZeroes(zeroDec, decimal - floatVal[1].length);
+                            zeroDec = addZeroes('', decimal - floatVal[1].length);
 
                             this.value = floatVal[0] + delim + floatVal[1] + zeroDec;
                         } else {
@@ -204,14 +207,10 @@
 
                     } else if (val === '') {
 
-                        zeroDec = addZeroes(zeroDec, decimal);
-
                         this.value = '0' + delim + zeroDec;
                     } else {
 
-                        zeroDec = addZeroes(zeroDec, decimal);
-
-                        val = isMultiZero(val);
+                        val = delMultiZero(val);
                         this.value = val + delim + zeroDec;
                     }
                 };
@@ -232,7 +231,7 @@
                             match = match[0].split(delim);
                         }
 
-                        match[0] = isMultiZero(match[0]);
+                        match[0] = delMultiZero(match[0]);
 
                         this.value = match[1] ? match[0] + delim + match[1] : match[0];
                         return false;
@@ -308,9 +307,7 @@
                     }
                 };
             });
-
         };
-
     }(jQuery));
 
 
