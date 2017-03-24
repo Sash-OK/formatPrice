@@ -97,6 +97,16 @@
                     return;
                 },
 
+                addZeroes = function (string, num) {
+                    if (!num) {
+                        return string;
+                    }
+
+                    string += '0';
+
+                    return addZeroes(string, --num);
+                },
+
                 insertChar = function (input, delim) {
                     var val = input.value,
                         cursorPos,
@@ -177,24 +187,14 @@
 
                         floatVal[0] = isMultiZero(floatVal[0]);
 
-                        function addZeroes(string, num) {
-                            if (!num) {
-                                return string;
-                            }
-
-                            string += '0';
-
-                            return addZeroes(string, --num);
-                        }
-
                         if (!floatVal[1].length) {
 
-                            addZeroes(zeroDec, decimal);
+                            zeroDec = addZeroes(zeroDec, decimal);
 
                             this.value = floatVal[0] + delim + zeroDec;
                         } else if (floatVal[1].length < decimal) {
 
-                            addZeroes(zeroDec, decimal - floatVal[1].length);
+                            zeroDec = addZeroes(zeroDec, decimal - floatVal[1].length);
 
                             this.value = floatVal[0] + delim + floatVal[1] + zeroDec;
                         } else {
@@ -204,12 +204,12 @@
 
                     } else if (val === '') {
 
-                        addZeroes(zeroDec, decimal);
+                        zeroDec = addZeroes(zeroDec, decimal);
 
                         this.value = '0' + delim + zeroDec;
                     } else {
 
-                        addZeroes(zeroDec, decimal);
+                        zeroDec = addZeroes(zeroDec, decimal);
 
                         val = isMultiZero(val);
                         this.value = val + delim + zeroDec;
