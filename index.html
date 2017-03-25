@@ -109,31 +109,28 @@
 
                 insertChar = function (input, delim) {
                     var val = input.value,
+                        iePos = {},
                         cursorPos,
-                        endPos,
-                        ieRange,
-                        ieTextInputRange,
-                        iePrevRange,
-                        ieBookmark;
+                        endPos;
 
                     if (input.createTextRange) {
 
-                        ieRange = document.selection.createRange();
-                        ieTextInputRange = input.createTextRange();
-                        iePrevRange = input.createTextRange();
-                        ieBookmark = ieRange.getBookmark();
-                        ieTextInputRange.moveToBookmark(ieBookmark);
-                        iePrevRange.setEndPoint('EndToStart', ieTextInputRange);
-                        cursorPos = iePrevRange.text.length;
-                        endPos = cursorPos + ieRange.text.length;
+                        iePos.ieRange = document.selection.createRange();
+                        iePos.ieTextInputRange = input.createTextRange();
+                        iePos.iePrevRange = input.createTextRange();
+                        iePos.ieBookmark = iePos.ieRange.getBookmark();
+                        iePos.ieTextInputRange.moveToBookmark(iePos.ieBookmark);
+                        iePos.iePrevRange.setEndPoint('EndToStart', iePos.ieTextInputRange);
+                        cursorPos = iePos.iePrevRange.text.length;
+                        endPos = cursorPos + iePos.ieRange.text.length;
                         input.value = val.slice(0, cursorPos) + delim + val.slice(endPos);
                         cursorPos++;
 
                         // Move the caret
-                        ieTextInputRange = input.createTextRange();
-                        ieTextInputRange.collapse(true);
-                        ieTextInputRange.move('character', cursorPos - (input.value.slice(0, cursorPos).split('\r\n').length - 1));
-                        ieTextInputRange.select();
+                        iePos.ieTextInputRange = input.createTextRange();
+                        iePos.ieTextInputRange.collapse(true);
+                        iePos.ieTextInputRange.move('character', cursorPos - (input.value.slice(0, cursorPos).split('\r\n').length - 1));
+                        iePos.ieTextInputRange.select();
 
                     } else {
 
