@@ -5,7 +5,7 @@
     $.fn.formatPrice = function (options) {
 
         var settings = $.extend({
-                valLen: 12,
+                valLen: 9,
                 delim: '.',
                 decimal: 2
             }, options),
@@ -139,7 +139,7 @@
                 decimal,
                 delim;
 
-            if (htmlData.formatPriceMaxlength) {
+            if (htmlData.formatPriceMaxlength && !isNaN(htmlData.formatPriceMaxlength)) {
                 options.valLen = parseInt(htmlData.formatPriceMaxlength);
             }
 
@@ -147,7 +147,7 @@
                 options.delim = htmlData.formatPriceDelimiter;
             }
 
-            if (htmlData.formatPriceDecimals) {
+            if (htmlData.formatPriceDecimals && !isNaN(htmlData.formatPriceDecimals)) {
                 options.decimal = parseInt(htmlData.formatPriceDecimals);
             }
 
