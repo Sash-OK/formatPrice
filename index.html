@@ -13,7 +13,7 @@
 
 <div style="margin: 200px auto; width: 70%;">
     <input type="text"
-           value="1111.11"
+           value=",,.,,1r234324234234234...14324234234234234234,.,.,.1.,.1d.,..,a.,.s.1.,.,.1"
            style="font-size: 30px;"
            class="input"
            data-format-price
@@ -21,17 +21,17 @@
            data-format-price-delimiter=","
            data-format-price-decimals="5">
     <input type="text"
-           value="2222.22"
+           value="0002dj222.22"
            style="font-size: 30px;"
            class="input js-inp"
            data-format-price>
     <input type="text"
-           value="3333.33"
+           value="f, y3333.33"
            style="font-size: 30px;"
            class="input"
            data-format-price>
     <input type="text"
-           value="4444.44"
+           value="fd4444.;,44"
            style="font-size: 30px;"
            class="input"
            data-format-price>
@@ -72,7 +72,7 @@
 
                 getChar = function (e) {
 
-                    if (e.which == null) { // IE
+                    if (e.which === null || e.which === undefined) { // IE
 
                         // спец. символ
                         if (e.keyCode < 32) {
@@ -145,8 +145,28 @@
                     }
                 },
                 
-                checkVal = function (text) {
-                    // TODO: checking value
+                formatValue = function (val, delim, valLen, decimal) {
+                    var reg = new RegExp('\\d{1,' + valLen + '}(\\' + delim + '\\d{1,' + decimal + '})?'),
+                        clearDot = new RegExp('(\\' + delim + '+)', 'g'),
+                        match;
+                    debugger;
+                    val = val.replace(/[^\d.,]/g, '');
+                    val = val.replace(/([,+\.+])/g, delim);
+                    val = val.replace(clearDot, delim);
+                    match = val.match(reg);
+
+                    if (match) {
+
+                        if (hasDelim(match[0], delim)) {
+                            match = match[0].split(delim);
+                        }
+
+                        match[0] = delMultiZero(match[0]);
+
+                        return match[1] ? match[0] + delim + match[1] : match[0];
+                    } else {
+                        return '0' + delim + '00';
+                    }
                 };
 
             // Greenify the collection based on the settings variable.
@@ -174,6 +194,8 @@
                 valLen = options.valLen;
                 decimal = options.decimal;
                 delim = options.delim;
+
+                this.value = formatValue(this.value, delim, valLen, decimal);
 
                 this.onblur = function () {
                     var val = this.value,
@@ -216,28 +238,10 @@
 
                 this.onpaste = function (e) {
                     var data = e ? e.clipboardData : window.clipboardData,
-                        textVal = data.getData('Text'),
-                        reg = new RegExp('\\d{1,' + valLen + '}(\\' + delim + '\\d{1,' + decimal + '})?'),
-                        match;
+                        text = data.getData('Text');
 
-                    textVal = textVal.replace(/[^\d.,]/g, '');
-                    textVal = textVal.replace(/[,+\.+]/g, delim);
-                    match = textVal.match(reg);
-
-                    if (match) {
-
-                        if (hasDelim(match[0], delim)) {
-                            match = match[0].split(delim);
-                        }
-
-                        match[0] = delMultiZero(match[0]);
-
-                        this.value = match[1] ? match[0] + delim + match[1] : match[0];
-                        return false;
-                    } else {
-                        this.value = '0' + delim + '00';
-                        return false;
-                    }
+                    this.value = formatValue(text, delim, valLen, decimal);
+                    return false;
                 };
 
                 this.onkeyup = function () {
