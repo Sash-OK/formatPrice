@@ -1,5 +1,5 @@
 {
-  "name": "input-format-price",
+  "name": "price-format",
   "version": "1.0.1",
   "description": "Input price format",
   "main": "index.js",
