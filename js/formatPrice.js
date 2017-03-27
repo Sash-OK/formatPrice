@@ -1,7 +1,5 @@
 (function ($) {
 
-    // 2 TODO метод валидации (true/false)
-
     $.fn.formatPrice = function (options) {
 
         var settings = $.extend({
@@ -127,7 +125,7 @@
                     }
                 } else {
 
-                    return '0' + delim + addZeroes('', decimal);
+                    return '';
                 }
             };
 
@@ -183,8 +181,9 @@
             };
 
             this.onkeypress = function (e) {
-                var val = this.value,
-                    char = getChar(e || event),
+                var e = e || event,
+                    val = this.value,
+                    char = getChar(e),
                     iePos = {},
                     cursorPos;
 
