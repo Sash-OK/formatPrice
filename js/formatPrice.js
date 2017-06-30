@@ -5,7 +5,8 @@
         var settings = $.extend({
                 valLen: 9,
                 delim: '.',
-                decimal: 2
+                decimal: 2,
+                maxValue: false
             }, options),
 
             hasDelim = function (text, delim) {
@@ -63,6 +64,14 @@
                 return addZeroes(string, --num);
             },
 
+            isBiggerThenMaxValue = function (valueStr, char, cursorPos, maxValue) {
+                var beforeChar = valueStr.slice(0, cursorPos),
+                    afterChar = valueStr.slice(cursorPos),
+                    futureValue = beforeChar + char + afterChar;
+                debugger;
+                return parseFloat(futureValue) > maxValue;
+            },
+
             insertChar = function (input, delim) {
                 var val = input.value,
                     iePos = {},
@@ -98,7 +107,7 @@
                 }
             },
 
-            formatValue = function (val, delim, valLen, decimal) {
+            formatValue = function (val, delim, valLen, decimal, maxValue) {
                 var reg = new RegExp('\\d{1,' + valLen + '}(\\' + delim + '\\d{1,' + decimal + '})?'),
                     clearDot = new RegExp('(\\' + delim + '+)', 'g'),
                     result;
@@ -129,16 +138,19 @@
                 }
             };
 
-        // Greenify the collection based on the settings variable.
         return this.each(function () {
             var htmlData = $(this).data(),
                 options = {},
                 valLen,
+                maxValue,
                 decimal,
                 delim;
 
             if (htmlData.formatPriceMaxlength && !isNaN(htmlData.formatPriceMaxlength)) {
                 options.valLen = parseInt(htmlData.formatPriceMaxlength);
+            }
+            if (htmlData.formatPriceMaxvalue && !isNaN(htmlData.formatPriceMaxvalue)) {
+                options.maxValue = parseInt(htmlData.formatPriceMaxvalue);
             }
 
             if (htmlData.formatPriceDelimiter) {
@@ -154,8 +166,9 @@
             valLen = options.valLen;
             decimal = options.decimal;
             delim = options.delim;
+            maxValue = options.maxValue || false;
 
-            this.value = formatValue(this.value, delim, valLen, decimal);
+            this.value = formatValue(this.value, delim, valLen, decimal, maxValue);
 
             this.onblur = function () {
 
@@ -215,14 +228,32 @@
 
                     val = val.split(delim);
 
+                    if (char < '0' || char > '9') {
+
+                        return false;
+                    }
+
                     if (val[0].length >= cursorPos && val[0].length > valLen - 1) {
+
                         return false;
                     }
 
                     if (cursorPos > val[0].length && val[1].length > decimal - 1) {
+
                         return false;
                     }
+
+                    if (maxValue && isBiggerThenMaxValue(val[0] + delim + val[1], char, cursorPos, maxValue)) {
+
+                        return false;
+                    }
+
                 } else {
+
+                    if ((char !== ',' && char !== '.' && char < '0') || (char !== ',' && char !== '.' && char > '9')) {
+
+                        return false;
+                    }
 
                     if (val.length > valLen - 1 && !(char === ',' || char === '.')) {
 
@@ -234,10 +265,11 @@
                         insertChar(this, delim);
                         return false;
                     }
-                }
 
-                if (char < '0' || char > '9') {
-                    return false;
+                    if (maxValue && isBiggerThenMaxValue(val, char, cursorPos, maxValue)) {
+
+                        return false;
+                    }
                 }
             };
         });
