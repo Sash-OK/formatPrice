@@ -68,7 +68,7 @@
                 var beforeChar = valueStr.slice(0, cursorPos),
                     afterChar = valueStr.slice(cursorPos),
                     futureValue = beforeChar + char + afterChar;
-                debugger;
+
                 return parseFloat(futureValue) > maxValue;
             },
 
@@ -189,6 +189,10 @@
                 if (!hasDelim(val, delim) && val.length > valLen) {
 
                     val = val.slice(0, valLen - val.length);
+
+                    if (maxValue && parseInt(val) > maxValue) {
+                        val = maxValue;
+                    }
                     this.value = val;
                 }
             };
