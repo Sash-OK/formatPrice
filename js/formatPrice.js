@@ -126,11 +126,22 @@
                     result[0] = delMultiZero(result[0]);
 
                     if(result[1]) {
+                        result = result[0] + delim + addZeroes(result[1], decimal - result[1].length);
 
-                        return result[0] + delim + addZeroes(result[1], decimal - result[1].length);
+                        if (maxValue && parseFloat(result)) {
+                            var str = maxValue.toString();
+                            str = str.match(reg);
+
+                            if (str[1]) {
+                                debugger;
+                            }
+                        }
+
+                        return maxValue && parseFloat(result) > maxValue ? maxValue : result;
                     } else {
+                        result = result[0] + delim + addZeroes('', decimal);
 
-                        return result[0] + delim + addZeroes('', decimal);
+                        return maxValue && parseFloat(result) > maxValue ? maxValue : result;
                     }
                 } else {
 
@@ -150,7 +161,7 @@
                 options.valLen = parseInt(htmlData.formatPriceMaxlength);
             }
             if (htmlData.formatPriceMaxvalue && !isNaN(htmlData.formatPriceMaxvalue)) {
-                options.maxValue = parseInt(htmlData.formatPriceMaxvalue);
+                options.maxValue = parseFloat(htmlData.formatPriceMaxvalue);
             }
 
             if (htmlData.formatPriceDelimiter) {
@@ -172,14 +183,14 @@
 
             this.onblur = function () {
 
-                this.value = formatValue(this.value, delim, valLen, decimal);
+                this.value = formatValue(this.value, delim, valLen, decimal, maxValue);
             };
 
             this.onpaste = function (e) {
                 var data = e ? e.clipboardData : window.clipboardData,
                     text = data.getData('Text');
 
-                this.value = formatValue(text, delim, valLen, decimal);
+                this.value = formatValue(text, delim, valLen, decimal, maxValue);
                 return false;
             };
 
