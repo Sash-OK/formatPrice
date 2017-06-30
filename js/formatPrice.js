@@ -193,6 +193,13 @@
                     if (maxValue && parseInt(val) > maxValue) {
                         val = maxValue;
                     }
+
+                    this.value = val;
+                }
+
+                if (maxValue && parseInt(val) > maxValue) {
+                    val = maxValue;
+
                     this.value = val;
                 }
             };
