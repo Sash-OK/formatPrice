@@ -69,7 +69,7 @@
                     afterChar = valueStr.slice(cursorPos),
                     futureValue = beforeChar + char + afterChar;
 
-                return parseFloat(futureValue) > maxValue;
+                return parseFloat(futureValue) > parseFloat(maxValue);
             },
 
             insertChar = function (input, delim) {
@@ -128,11 +128,11 @@
                     if(result[1]) {
                         result = result[0] + delim + addZeroes(result[1], decimal - result[1].length);
 
-                        return maxValue && parseFloat(result) > maxValue ? maxValue : result;
+                        return maxValue && parseFloat(result) > parseFloat(maxValue) ? maxValue : result;
                     } else {
                         result = result[0] + delim + addZeroes('', decimal);
 
-                        return maxValue && parseFloat(result) > maxValue ? maxValue : result;
+                        return maxValue && parseFloat(result) > parseFloat(maxValue) ? maxValue : result;
                     }
                 } else {
 
@@ -152,7 +152,7 @@
                 options.valLen = parseInt(htmlData.formatPriceMaxlength);
             }
             if (htmlData.formatPriceMaxvalue && !isNaN(htmlData.formatPriceMaxvalue)) {
-                options.maxValue = parseFloat(htmlData.formatPriceMaxvalue);
+                options.maxValue = htmlData.formatPriceMaxvalue;
             }
 
             if (htmlData.formatPriceDelimiter) {
@@ -192,14 +192,14 @@
 
                     val = val.slice(0, valLen - val.length);
 
-                    if (maxValue && parseInt(val) > maxValue) {
+                    if (maxValue && parseInt(val) > parseInt(maxValue)) {
                         val = maxValue;
                     }
 
                     this.value = val;
                 }
 
-                if (maxValue && parseInt(val) > maxValue) {
+                if (maxValue && parseInt(val) > parseInt(maxValue)) {
                     val = maxValue;
 
                     this.value = val;
