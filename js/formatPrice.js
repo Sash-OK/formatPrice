@@ -128,15 +128,6 @@
                     if(result[1]) {
                         result = result[0] + delim + addZeroes(result[1], decimal - result[1].length);
 
-                        if (maxValue && parseFloat(result)) {
-                            var str = maxValue.toString();
-                            str = str.match(reg);
-
-                            if (str[1]) {
-                                debugger;
-                            }
-                        }
-
                         return maxValue && parseFloat(result) > maxValue ? maxValue : result;
                     } else {
                         result = result[0] + delim + addZeroes('', decimal);
