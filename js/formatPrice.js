@@ -293,7 +293,7 @@
                         return false;
                     }
 
-                    if (cursorPos > val[0].length && val[1].length > decimal - 1) {
+                    if (cursorPos > val[0].length && val[1].length > decimal - 1 && selectedTxt === '') {
 
                         return false;
                     }
