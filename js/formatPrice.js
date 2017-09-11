@@ -1,5 +1,5 @@
 /**
- * formatPrice v1.0.5
+ * formatPrice v1.0.6
  * https://github.com/Sash-OK/priceFormat
  * MIT License | (c) Sash-OK 11.09.2017
  */
