@@ -64,12 +64,16 @@
                 return addZeroes(string, --num);
             },
 
-            isBiggerThenMaxValue = function (valueStr, char, cursorPos, maxValue) {
+            isBiggerThenMaxValue = function (valueStr, char, cursorPos, maxValue, selected) {
                 var beforeChar = valueStr.slice(0, cursorPos),
                     afterChar = valueStr.slice(cursorPos),
                     futureValue = beforeChar + char + afterChar;
 
-                return parseFloat(futureValue) > parseFloat(maxValue);
+                if (selected) {
+                    return parseFloat(valueStr) > parseFloat(maxValue);
+                } else {
+                    return parseFloat(futureValue) > parseFloat(maxValue);
+                }
             },
 
             insertChar = function (input, delim) {
@@ -208,10 +212,27 @@
 
             this.onkeypress = function (e) {
                 var e = e || event,
-                    val = this.value,
+                    $field = this,
+                    val = $field.value,
                     char = getChar(e),
                     iePos = {},
-                    cursorPos;
+                    cursorPos,
+                    selectedTxt = getSelectionText();
+
+                function getSelectionText() {
+                    var txt = '';
+
+                    if (window.getSelection) {
+
+                        txt = $field.value.substring($field.selectionStart, $field.selectionEnd);
+
+                    } else {
+                        // IE, используем объект selection
+                        txt = document.selection.createRange().text;
+                    }
+
+                    return txt;
+                }
 
                 if (e.ctrlKey || e.altKey) {
                     return;
@@ -237,6 +258,21 @@
                     return;
                 }
 
+                if (selectedTxt !== '') {
+
+                    var valArr = val.split(''),
+                        selectedLength = selectedTxt.length;
+
+                    if (char < '0' || char > '9') {
+
+                        return false;
+                    }
+
+                    valArr.splice(cursorPos, selectedLength, char);
+
+                    val = valArr.join('');
+                }
+
                 if (hasDelim(val, delim)) {
 
                     val = val.split(delim);
@@ -256,7 +292,7 @@
                         return false;
                     }
 
-                    if (maxValue && isBiggerThenMaxValue(val[0] + delim + val[1], char, cursorPos, maxValue)) {
+                    if (maxValue && isBiggerThenMaxValue(val[0] + delim + val[1], char, cursorPos, maxValue, selectedTxt !== '')) {
 
                         return false;
                     }
@@ -279,7 +315,7 @@
                         return false;
                     }
 
-                    if (maxValue && isBiggerThenMaxValue(val, char, cursorPos, maxValue)) {
+                    if (maxValue && isBiggerThenMaxValue(val, char, cursorPos, maxValue, selectedTxt !== '')) {
 
                         return false;
                     }
