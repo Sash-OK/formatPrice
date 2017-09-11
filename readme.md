@@ -2,7 +2,7 @@
 
  [Demo page](https://sash-ok.github.io/priceFormat/)
 
-Запрещает вводить и вставлять буквы и символы, только цифры и знак разделения "." или ","
+Запрещает вводить и вставлять буквы и символы в текстовое поле, только цифры и знак разделения "." или ","
 
 ```bash
 npm install price-format
@@ -41,7 +41,6 @@ $(selector).formatPrice({
 <input type="text"
        value="97,99"
        class="form-control"
-       data-format-price
        data-format-price-maxlength="3"
        data-format-price-maxvalue="100.00"
        data-format-price-delimiter="."
