@@ -1,3 +1,9 @@
+/**
+ * formatPrice v1.0.5
+ * https://github.com/Sash-OK/priceFormat
+ * MIT License | (c) Sash-OK 11.09.2017
+ */
+
 (function ($) {
 
     $.fn.formatPrice = function (options) {
