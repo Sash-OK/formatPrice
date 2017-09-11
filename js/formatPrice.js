@@ -1,5 +1,5 @@
 /**
- * formatPrice v1.0.6
+ * formatPrice v1.0.7
  * https://github.com/Sash-OK/priceFormat
  * MIT License | (c) Sash-OK 11.09.2017
  */
@@ -288,7 +288,7 @@
                         return false;
                     }
 
-                    if (val[0].length >= cursorPos && val[0].length > valLen - 1) {
+                    if (val[0].length >= cursorPos && val[0].length > valLen - 1 && selectedTxt === '') {
 
                         return false;
                     }
@@ -310,7 +310,7 @@
                         return false;
                     }
 
-                    if (val.length > valLen - 1 && !(char === ',' || char === '.')) {
+                    if (val.length > valLen - 1 && selectedTxt === '' && !(char === ',' || char === '.')) {
 
                         return false;
                     }
